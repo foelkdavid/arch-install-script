@@ -128,8 +128,9 @@
 #  pacstrap /mnt neofetch 
 
   echo "generating fstab file:" &&
-  fstabgen -U /mnt >> /mnt/etc/fstab &&
+  genfstab -U /mnt >> /mnt/etc/fstab &&
 
+  printf "\n\n" &&
   echo -e "\033[0;32m$(tput bold)---- Finished Preparation ----$(tput sgr0)" &&
   printf "\n\n"
 #################################
@@ -138,7 +139,7 @@
  echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
   sleep 1
 
-  chroot-script () {
+  function chroot-script {
       echo "setting timezone:" &&
       ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
       echo "done." &&
@@ -196,7 +197,7 @@
 
       echo "locking root user" &&
       passwd -l root &&
-      echo "done" &&
+      echo "done"
   }
 
   grub-uefi-script () {
