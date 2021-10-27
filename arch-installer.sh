@@ -64,12 +64,12 @@
 
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") 
-  partprobe
+  partprobe $DSK
   PARTITION2=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "2p")
-  partprobe 
+  partprobe $DSK 
   if [ $BOOTMODE = UEFI ]; then PARTITION3=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $3}' | sed -n "3p"); else echo "No third Partition needet."; fi
-  partprobe
-  
+  partprobe $DSK
+
   #declaring partition paths as variables
   if [ $BOOTMODE = UEFI ]; then
     EFIPART=$PARTITION1
