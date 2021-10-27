@@ -99,21 +99,24 @@
     #swap partition
     mkswap $SWAPPART &&
 
-    #root partition
-    mkfs.ext4 $ROOTPART &&
 
-  #filesystem mounting / enabling swapspace
-    #root partition
-    mount $ROOTPART /mnt &&
+    echo $ROOTPART
+    
+  #   #root partition
+  #   mkfs.ext4 $ROOTPART &&
 
-    #swap partition
-    swapon $SWAPPART &&
+  # #filesystem mounting / enabling swapspace
+  #   #root partition
+  #   mount $ROOTPART /mnt &&
 
-    #efi
-    if [ $BOOTMODE = UEFI ]; then
-      mkdir /mnt/efi
-      mount $EFIPART /mnt/efi;
-    fi
+  #   #swap partition
+  #   swapon $SWAPPART &&
+
+  #   #efi
+  #   if [ $BOOTMODE = UEFI ]; then
+  #     mkdir /mnt/efi
+  #     mount $EFIPART /mnt/efi;
+  #   fi
 
   echo -e "\033[0;32m$(tput bold)---- Finished Partitioning ----$(tput sgr0)" &&
   printf "\n\n"
