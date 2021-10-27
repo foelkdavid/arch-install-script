@@ -200,22 +200,7 @@
   #     echo "done"
   # }
 
-#   grub-uefi-script () {
-#     echo "setting up grub for UEFI system:" &&
-#     pacman -S efibootmgr
-#     read -p "Please enter path for efi mountpoint: " EFIMP &&
-#     grub-install --target=x86_64-efi --efi-directory=$EFIMP --bootloader-id=GRUB &&
-#     grub-mkconfig -o /boot/grub/grub.cfg &&
-#     echo "done"
-# }
 
-#   grub-bios-script () {
-#     echo "setting up grub for BIOS system:" &&
-#     read -p "Please enter path for filesystem: " FSPI &&
-#     grub-install --target=i386-pc $FSPI &&
-#     grub-mkconfig -o /boot/grub/grub.cfg &&
-#     echo "done"
-# }
 arch-chroot /mnt /bin/bash -- << EOCHROOT
 
       echo "setting timezone:" &&
@@ -238,35 +223,13 @@ arch-chroot /mnt /bin/bash -- << EOCHROOT
       echo "KEYMAP=de-latin1" >> /etc/vconsole.conf &&
       echo "done" &&
 
-      echo "setting hostname:" &&
-      read -p "Please enter a valid Hostname : " CHN &&
-      echo $CHN >> /etc/hostname &&
-      echo "127.0.0.1 localhost" >> /etc/hosts &&
-      echo "::1" >> /etc/hosts &&
-      echo "127.0.1.1 $CHN.localdomain $CHN" >> /etc/hosts &&
-      echo "done!" &&
 
-      echo "installing microcode" &&
-
-      read -p "Please enter your CPU manufacturer:  [ amd | intel ]" SYSBRND && 
-      pacman -S $SYSBRND-ucode &&
-      echo "done!" &&
 
       echo "enabling NetworkManager" &&
       systemctl enable NetworkManager &&
 
-      # echo "filling /etc/skel directory" &&
-      # rm -rf /etc/skel/* &&
-      # cd /tmp &&
-      # git clone https://github.com/foelkdavid/instartix-dotfiles &&
-      # cd /tmp/instartix-dotfiles/ &&
-      # cp -rf .config .z* /etc/skel &&
 
-      echo "creating new User" &&
-      read -p "Please enter a valid username: " USRNME &&
-      useradd -s /bin/zsh -m $USRNME &&
-      passwd $USRNME &&
-      usermod -a -G wheel $USRNME &&
+
 
       echo "setting up sudo" &&
       echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers &&
@@ -278,7 +241,39 @@ arch-chroot /mnt /bin/bash -- << EOCHROOT
       echo "done"
 
 EOCHROOT
-#   if [ $BOOTMODE = UEFI ]; then grub-uefi-script; else grub-bios-script; fi
+
+      echo "setting hostname:" &&
+      read -p "Please enter a valid Hostname : " CHN &&
+      echo $CHN >> /mnt/etc/hostname &&
+      echo "127.0.0.1 localhost" >> /mnt/etc/hosts &&
+      echo "::1" >> /mnt/etc/hosts &&
+      echo "127.0.1.1 $CHN.localdomain $CHN" >> /mnt/etc/hosts &&
+      echo "done!" &&
+
+      echo "creating new User" &&
+      read -p "Please enter a valid username: " USRNME &&
+      arch-chroot /mnt useradd -m $USRNME &&
+      arch-chroot /mnt passwd $USRNME &&
+      arch-chroot /mnt usermod -a -G wheel $USRNME &&
+
+      echo "installing microcode" &&
+      read -p "Please enter your CPU manufacturer:  [ amd | intel ]" SYSBRND && 
+      pacstrap /mnt $SYSBRND-ucode &&
+      echo "done!" &&
+
+
+  if [ $BOOTMODE = UEFI ]; then
+    echo "setting up grub for UEFI system:" &&
+    pacstrap /mnt efibootmgr
+    arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &&
+    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
+  else
+    echo "setting up grub for BIOS system:" &&
+    arch-chroot grub-install --target=i386-pc $DSK &&
+    arch-chroot grub-mkconfig -o /boot/grub/grub.cfg &&
+    echo "done"
+  fi
+
 
 echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
   printf "\n\n"
