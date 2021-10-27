@@ -47,9 +47,9 @@
     fi
     echo bootmode detected: $BOOTMODE &&
 
-  #creating efi partition if system is booting in UEFI mode
-    if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nw\n" | fdisk $DSK; else echo "no efi partition needet, "; fi
-    echo "creating SWAP space"
+  # #creating efi partition if system is booting in UEFI mode
+  #   if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nw\n" | fdisk $DSK; else echo "no efi partition needet, "; fi
+  #   echo "creating SWAP space"
 
   #creating swap partition
     #get RAM size
@@ -59,11 +59,17 @@
     SWAPSIZE=$(expr $RAM + 4) &&
     echo "SWAPSIZE = "  $SWAPSIZE &&
 
-    #creating swap partition
-    printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK &&
+  #   #creating swap partition
+  #   printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK &&
 
-    #creating root partition
-    printf "n\np\n \n \n \nw\n" | fdisk $DSK  &&
+  # #creating root partition
+  # printf "n\np\n \n \n \nw\n" | fdisk $DSK  &&
+
+ if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nn\np\n \n \n+"$SWAPSIZE"Gn\np\n \n \n \nw\n" | fdisk $DSK; else printf "n\np\n \n \n+"$SWAPSIZE"Gn\np\n \n \n \nw\n" | fdisk $DSK; fi
+
+
+
+
 
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") &&
