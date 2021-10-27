@@ -210,8 +210,8 @@ EOCHROOT
     echo "done";
   else
     echo "setting up grub for BIOS system:" &&
-    arch-chroot grub-install --target=i386-pc $DSK &&
-    arch-chroot grub-mkconfig -o /boot/grub/grub.cfg &&
+    arch-chroot /mnt grub-install --target=i386-pc $DSK &&
+    arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
     echo "done";
   fi
 
