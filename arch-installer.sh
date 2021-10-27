@@ -122,7 +122,7 @@
   sleep 1
 
   echo "installing required packages to new system"
-  pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db vim nano sudo &&
+  pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db vim nano sudo neofetch &&
 
 #  echo "installing extended packages to new system"
 #  pacstrap /mnt neofetch 
