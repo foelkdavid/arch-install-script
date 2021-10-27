@@ -36,6 +36,9 @@
         esac
     done
 
+    echo "REMOVING EXISTING FILESYSTEMS"
+    sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." &&
+    
   #checks and prints used bootmode.
     if ls /sys/firmware/efi/efivars ; then
       BOOTMODE=UEFI
