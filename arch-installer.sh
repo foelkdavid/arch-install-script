@@ -57,10 +57,10 @@
     echo "SWAPSIZE = "  $SWAPSIZE &&
 
     #creating swap partition
-    printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk /dev/sdb
+    printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK
 
   #creating root partition
-  printf "n\np\n \n \n \nw\n" | fdisk /dev/sdb
+  printf "n\np\n \n \n \nw\n" | fdisk $DSK
 
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") 
@@ -105,111 +105,111 @@
   printf "\n\n"
   sleep 1
 
-##################################
-######### 2. PREPARATION #########
-##################################
+# ##################################
+# ######### 2. PREPARATION #########
+# ##################################
 
-  echo -e "\033[0;32m$(tput bold)---- Starting Preparation ----$(tput sgr0)" &&
-  sleep 1
+#   echo -e "\033[0;32m$(tput bold)---- Starting Preparation ----$(tput sgr0)" &&
+#   sleep 1
 
-  echo "installing required packages to new system"
-  pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db &&
+#   echo "installing required packages to new system"
+#   pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db &&
 
-#  echo "installing extended packages to new system"
-#  pacstrap /mnt neofetch 
+# #  echo "installing extended packages to new system"
+# #  pacstrap /mnt neofetch 
 
-  echo "generating fstab file:" &&
-  fstabgen -U /mnt >> /mnt/etc/fstab &&
+#   echo "generating fstab file:" &&
+#   fstabgen -U /mnt >> /mnt/etc/fstab &&
 
-echo -e "\033[0;32m$(tput bold)---- Finished Preparation ----$(tput sgr0)" &&
-  printf "\n\n"
-#################################
-######## 3. INSTALLATION ########
-#################################
- echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
-  sleep 1
+# echo -e "\033[0;32m$(tput bold)---- Finished Preparation ----$(tput sgr0)" &&
+#   printf "\n\n"
+# #################################
+# ######## 3. INSTALLATION ########
+# #################################
+#  echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
+#   sleep 1
 
-  chroot-script () {
-      echo "setting timezone:" &&
-      ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
-      echo "done." &&
+#   chroot-script () {
+#       echo "setting timezone:" &&
+#       ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
+#       echo "done." &&
 
-      echo "syncing system time:" &&
-      hwclock --systohc &&
-      echo "done." &&
+#       echo "syncing system time:" &&
+#       hwclock --systohc &&
+#       echo "done." &&
 
-      echo "appending locales to locale.gen:" &&
-      echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&
-      echo "generating locales:" &&
-      locale-gen &&
-      echo "setting system locale:" &&
-      echo "LANG=en_US.UTF-8" >> /etc/locale.conf &&
-      echo "done!" &&
+#       echo "appending locales to locale.gen:" &&
+#       echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&
+#       echo "generating locales:" &&
+#       locale-gen &&
+#       echo "setting system locale:" &&
+#       echo "LANG=en_US.UTF-8" >> /etc/locale.conf &&
+#       echo "done!" &&
 
-      echo "setting keymap" &&
-      echo "KEYMAP=de-latin1" >> /etc/vconsole.conf &&
-      echo "done" &&
+#       echo "setting keymap" &&
+#       echo "KEYMAP=de-latin1" >> /etc/vconsole.conf &&
+#       echo "done" &&
 
-      echo "setting hostname:" &&
-      read -p "Please enter a valid Hostname : " CHN &&
-      echo $CHN >> /etc/hostname &&
-      echo "127.0.0.1 localhost" >> /etc/hosts &&
-      echo "::1" >> /etc/hosts &&
-      echo "127.0.1.1 $CHN.localdomain $CHN" >> /etc/hosts &&
-      echo "done!" &&
+#       echo "setting hostname:" &&
+#       read -p "Please enter a valid Hostname : " CHN &&
+#       echo $CHN >> /etc/hostname &&
+#       echo "127.0.0.1 localhost" >> /etc/hosts &&
+#       echo "::1" >> /etc/hosts &&
+#       echo "127.0.1.1 $CHN.localdomain $CHN" >> /etc/hosts &&
+#       echo "done!" &&
 
-      echo "installing microcode" &&
+#       echo "installing microcode" &&
 
-      read -p "Please enter your CPU manufacturer:  [ amd | intel ]" SYSBRND && 
-      pacman -S $SYSBRND-ucode &&
-      echo "done!" &&
+#       read -p "Please enter your CPU manufacturer:  [ amd | intel ]" SYSBRND && 
+#       pacman -S $SYSBRND-ucode &&
+#       echo "done!" &&
 
-      echo "enabling NetworkManager" &&
-      systemctl enable NetworkManager &&
+#       echo "enabling NetworkManager" &&
+#       systemctl enable NetworkManager &&
 
-      # echo "filling /etc/skel directory" &&
-      # rm -rf /etc/skel/* &&
-      # cd /tmp &&
-      # git clone https://github.com/foelkdavid/instartix-dotfiles &&
-      # cd /tmp/instartix-dotfiles/ &&
-      # cp -rf .config .z* /etc/skel &&
+#       # echo "filling /etc/skel directory" &&
+#       # rm -rf /etc/skel/* &&
+#       # cd /tmp &&
+#       # git clone https://github.com/foelkdavid/instartix-dotfiles &&
+#       # cd /tmp/instartix-dotfiles/ &&
+#       # cp -rf .config .z* /etc/skel &&
 
-      echo "creating new User" &&
-      read -p "Please enter a valid username: " USRNME &&
-      useradd -s /bin/zsh -m $USRNME &&
-      passwd $USRNME &&
-      usermod -a -G wheel $USRNME &&
+#       echo "creating new User" &&
+#       read -p "Please enter a valid username: " USRNME &&
+#       useradd -s /bin/zsh -m $USRNME &&
+#       passwd $USRNME &&
+#       usermod -a -G wheel $USRNME &&
 
-      echo "setting up sudo" &&
-      echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers &&
-      echo "%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown" >> /etc/sudoers &&
-      echo "done." &&
+#       echo "setting up sudo" &&
+#       echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers &&
+#       echo "%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown" >> /etc/sudoers &&
+#       echo "done." &&
 
-      echo "locking root user" &&
-      passwd -l root &&
-      echo "done" &&
-  }
+#       echo "locking root user" &&
+#       passwd -l root &&
+#       echo "done" &&
+#   }
 
-  grub-uefi-script () {
-    echo "setting up grub for UEFI system:" &&
-    pacman -S efibootmgr
-    read -p "Please enter path for efi mountpoint: " EFIMP &&
-    grub-install --target=x86_64-efi --efi-directory=$EFIMP --bootloader-id=GRUB &&
-    grub-mkconfig -o /boot/grub/grub.cfg &&
-    echo "done"
-}
+#   grub-uefi-script () {
+#     echo "setting up grub for UEFI system:" &&
+#     pacman -S efibootmgr
+#     read -p "Please enter path for efi mountpoint: " EFIMP &&
+#     grub-install --target=x86_64-efi --efi-directory=$EFIMP --bootloader-id=GRUB &&
+#     grub-mkconfig -o /boot/grub/grub.cfg &&
+#     echo "done"
+# }
 
-  grub-bios-script () {
-    echo "setting up grub for BIOS system:" &&
-    read -p "Please enter path for filesystem: " FSPI &&
-    grub-install --target=i386-pc $FSPI &&
-    grub-mkconfig -o /boot/grub/grub.cfg &&
-    echo "done"
-}
+#   grub-bios-script () {
+#     echo "setting up grub for BIOS system:" &&
+#     read -p "Please enter path for filesystem: " FSPI &&
+#     grub-install --target=i386-pc $FSPI &&
+#     grub-mkconfig -o /boot/grub/grub.cfg &&
+#     echo "done"
+# }
 
-  arch-chroot /mnt chroot-script &&
-  if [ $BOOTMODE = UEFI ]; then grub-uefi-script; else grub-bios-script; fi
+#   arch-chroot /mnt chroot-script &&
+#   if [ $BOOTMODE = UEFI ]; then grub-uefi-script; else grub-bios-script; fi
 
-echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
-  printf "\n\n"
-echo -e "\033[0;32m$(tput bold)---- Enjoy your new System :) ----$(tput sgr0)" 
+# echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
+#   printf "\n\n"
+# echo -e "\033[0;32m$(tput bold)---- Enjoy your new System :) ----$(tput sgr0)" 
