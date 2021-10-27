@@ -124,8 +124,8 @@
   echo "installing required packages to new system"
   pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db vim nano sudo &&
 
-#  echo "installing extended packages to new system"
-#  pacstrap /mnt neofetch 
+  echo "installing extended packages to new system"
+  pacstrap /mnt neofetch 
 
   echo "generating fstab file:" &&
   genfstab -U /mnt >> /mnt/etc/fstab &&
@@ -136,49 +136,53 @@
 #################################
 ######## 3. INSTALLATION ########
 #################################
- echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
+#
+#
+#
+#
+  echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
   sleep 1
 
 
-arch-chroot /mnt /bin/bash -- << EOCHROOT
+  arch-chroot /mnt /bin/bash -- << EOCHROOT
 
-      echo "setting timezone:" &&
-      ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
-      echo "done." &&
+        echo "setting timezone:" &&
+        ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
+        echo "done." &&
 
-      echo "syncing system time:" &&
-      hwclock --systohc &&
-      echo "done." &&
+        echo "syncing system time:" &&
+        hwclock --systohc &&
+        echo "done." &&
 
-      echo "appending locales to locale.gen:" &&
-      echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&
-      echo "generating locales:" &&
-      locale-gen &&
-      echo "setting system locale:" &&
-      echo "LANG=en_US.UTF-8" >> /etc/locale.conf &&
-      echo "done!" &&
+        echo "appending locales to locale.gen:" &&
+        echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen &&
+        echo "generating locales:" &&
+        locale-gen &&
+        echo "setting system locale:" &&
+        echo "LANG=en_US.UTF-8" >> /etc/locale.conf &&
+        echo "done!" &&
 
-      echo "setting keymap" &&
-      echo "KEYMAP=de-latin1" >> /etc/vconsole.conf &&
-      echo "done" &&
-
-
-
-      echo "enabling NetworkManager" &&
-      systemctl enable NetworkManager &&
+        echo "setting keymap" &&
+        echo "KEYMAP=de-latin1" >> /etc/vconsole.conf &&
+        echo "done" &&
 
 
 
+        echo "enabling NetworkManager" &&
+        systemctl enable NetworkManager &&
 
-      echo "setting up sudo" &&
-      echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers &&
-      echo "%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown" >> /etc/sudoers &&
-      echo "done." &&
 
-      echo "locking root user" &&
-      passwd -l root &&
-      echo "done" &&
-      sleep 2 
+
+
+        echo "setting up sudo" &&
+        echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers &&
+        echo "%wheel ALL=(ALL) NOPASSWD: /sbin/poweroff, /sbin/reboot, /sbin/shutdown" >> /etc/sudoers &&
+        echo "done." &&
+
+        echo "locking root user" &&
+        passwd -l root &&
+        echo "done" &&
+        sleep 2 
 EOCHROOT
 
       sleep 2 &&
@@ -216,6 +220,6 @@ EOCHROOT
   fi
 
 
-echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
+  echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
   printf "\n\n"
-echo -e "\033[0;32m$(tput bold)---- Enjoy your new System :) ----$(tput sgr0)" 
+  echo -e "\033[0;32m$(tput bold)---- Enjoy your new System :) ----$(tput sgr0)" 
