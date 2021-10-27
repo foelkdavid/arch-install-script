@@ -240,8 +240,9 @@ arch-chroot /mnt /bin/bash -- << EOCHROOT
       passwd -l root &&
       echo "done"
 
-EOCHROOT
+EOCHROOT &&
 
+      sleep 5 &&
       echo "setting hostname:" &&
       read -p "Please enter a valid Hostname : " CHN &&
       echo $CHN >> /mnt/etc/hostname &&
@@ -267,11 +268,12 @@ EOCHROOT
     pacstrap /mnt efibootmgr
     arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &&
     arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
+    echo "done";
   else
     echo "setting up grub for BIOS system:" &&
     arch-chroot grub-install --target=i386-pc $DSK &&
     arch-chroot grub-mkconfig -o /boot/grub/grub.cfg &&
-    echo "done"
+    echo "done";
   fi
 
 
