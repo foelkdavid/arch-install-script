@@ -37,7 +37,7 @@
     done
 
     echo "REMOVING EXISTING FILESYSTEMS" &&
-    sleep 5 &&
+    sleep 3 &&
 
   #checks and prints used bootmode.
     if ls /sys/firmware/efi/efivars ; then
@@ -46,10 +46,6 @@
       BOOTMODE=BIOS
     fi
     echo bootmode detected: $BOOTMODE &&
-
-  # #creating efi partition if system is booting in UEFI mode
-  #   if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nw\n" | fdisk $DSK; else echo "no efi partition needet, "; fi
-  #   echo "creating SWAP space"
 
   #creating swap partition
     #get RAM size
@@ -61,16 +57,12 @@
 
   #creating efi, swap, root partition for UEFI systems; creating swap, root partition for BIOS systems
   if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nn\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; else printf "n\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; fi
-
+  partprobe $DSK &&
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") &&
-  partprobe $DSK &&
-  sleep 2
   PARTITION2=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "2p") &&
-  partprobe $DSK &&
   if [ $BOOTMODE = UEFI ]; then PARTITION3=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "3p"); else echo "No third Partition needet."; fi
-  sleep 2 &&
-  partprobe $DSK &&
+
 
   #declaring partition paths as variables
   if [ $BOOTMODE = UEFI ]; then
@@ -89,7 +81,6 @@
 
     #swap partition
     mkswap $SWAPPART &&
-
 
     echo $ROOTPART
 
