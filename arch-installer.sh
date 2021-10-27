@@ -144,7 +144,7 @@
   sleep 1
 
 
-  arch-chroot /mnt /bin/bash -- << EOCHROOT
+arch-chroot /mnt /bin/bash -- << EOCHROOT
 
         echo "setting timezone:" &&
         ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
