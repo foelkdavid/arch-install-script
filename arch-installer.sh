@@ -178,7 +178,7 @@ arch-chroot /mnt /bin/bash -- << EOCHROOT
       echo "locking root user" &&
       passwd -l root &&
       echo "done" &&
-      sleep 5 
+      sleep 2 
 EOCHROOT
 
       sleep 2 &&
