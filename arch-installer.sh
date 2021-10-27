@@ -112,17 +112,17 @@
   echo -e "\033[0;32m$(tput bold)---- Starting Preparation ----$(tput sgr0)" &&
   sleep 1
 
-  echo "installing required packages to new system"
-  pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db &&
+#   echo "installing required packages to new system"
+#   pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db &&
 
-#  echo "installing extended packages to new system"
-#  pacstrap /mnt neofetch 
+# #  echo "installing extended packages to new system"
+# #  pacstrap /mnt neofetch 
 
-  echo "generating fstab file:" &&
-  fstabgen -U /mnt >> /mnt/etc/fstab &&
+#   echo "generating fstab file:" &&
+#   fstabgen -U /mnt >> /mnt/etc/fstab &&
 
-  echo -e "\033[0;32m$(tput bold)---- Finished Preparation ----$(tput sgr0)" &&
-  printf "\n\n"
+#   echo -e "\033[0;32m$(tput bold)---- Finished Preparation ----$(tput sgr0)" &&
+#   printf "\n\n"
 # #################################
 # ######## 3. INSTALLATION ########
 # #################################
