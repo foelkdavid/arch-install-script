@@ -59,17 +59,8 @@
     SWAPSIZE=$(expr $RAM + 4) &&
     echo "SWAPSIZE = "  $SWAPSIZE &&
 
-  #   #creating swap partition
-  #   printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK &&
-
-  # #creating root partition
-  # printf "n\np\n \n \n \nw\n" | fdisk $DSK  &&
-
- if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nn\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; else printf "n\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; fi
-
-
-
-
+  #creating efi, swap, root partition for UEFI systems; creating swap, root partition for BIOS systems
+  if [ $BOOTMODE = UEFI ]; then printf "n\np\n \n \n+1G\nn\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; else printf "n\np\n \n \n+"$SWAPSIZE"G\nn\np\n \n \n \nw\n" | fdisk $DSK; fi
 
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") &&
@@ -102,21 +93,21 @@
 
     echo $ROOTPART
 
-  #   #root partition
-  #   mkfs.ext4 $ROOTPART &&
+    #root partition
+    mkfs.ext4 $ROOTPART &&
 
-  # #filesystem mounting / enabling swapspace
-  #   #root partition
-  #   mount $ROOTPART /mnt &&
+  #filesystem mounting / enabling swapspace
+    #root partition
+    mount $ROOTPART /mnt &&
 
-  #   #swap partition
-  #   swapon $SWAPPART &&
+    #swap partition
+    swapon $SWAPPART &&
 
-  #   #efi
-  #   if [ $BOOTMODE = UEFI ]; then
-  #     mkdir /mnt/efi
-  #     mount $EFIPART /mnt/efi;
-  #   fi
+    #efi
+    if [ $BOOTMODE = UEFI ]; then
+      mkdir /mnt/efi
+      mount $EFIPART /mnt/efi;
+    fi
 
   echo -e "\033[0;32m$(tput bold)---- Finished Partitioning ----$(tput sgr0)" &&
   printf "\n\n"
