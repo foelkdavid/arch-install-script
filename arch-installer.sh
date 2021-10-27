@@ -57,10 +57,10 @@
     echo "SWAPSIZE = "  $SWAPSIZE &&
 
     #creating swap partition
-    printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK
+    printf "n\np\n \n \n+"$SWAPSIZE"G\nw\n" | fdisk $DSK &&
 
-  #creating root partition
-  printf "n\np\n \n \n \nw\n" | fdisk $DSK
+    #creating root partition
+    printf "n\np\n \n \n \nw\n" | fdisk $DSK &&
 
   #getting paths of partitions
   PARTITION1=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "1p") 
