@@ -38,7 +38,7 @@
 
     echo "REMOVING EXISTING FILESYSTEMS"
     sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." sleep 1 && echo "." &&
-    
+
   #checks and prints used bootmode.
     if ls /sys/firmware/efi/efivars ; then
       BOOTMODE=UEFI
@@ -89,17 +89,17 @@
     if [ $BOOTMODE = UEFI ]; then mkfs.fat -F32 $EFIPART; fi
 
     #swap partition
-    mkswap $SWAPPART
+    mkswap $SWAPPART &&
 
     #root partition
-    mkfs.ext4 $ROOTPART
+    mkfs.ext4 $ROOTPART &&
 
   #filesystem mounting / enabling swapspace
     #root partition
-    mount $ROOTPART /mnt
+    mount $ROOTPART /mnt &&
 
     #swap partition
-    swapon $SWAPPART
+    swapon $SWAPPART &&
 
     #efi
     if [ $BOOTMODE = UEFI ]; then
