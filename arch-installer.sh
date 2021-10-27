@@ -139,7 +139,7 @@
  echo -e "\033[0;32m$(tput bold)---- Starting Installation ----$(tput sgr0)" &&
   sleep 1
 
-  function chroot-script {
+  chroot-script () {
       echo "setting timezone:" &&
       ln -sf /usr/share/zoneinfo/Europe/Vienna /etc/localtime &&
       echo "done." &&
@@ -200,25 +200,25 @@
       echo "done"
   }
 
-  grub-uefi-script () {
-    echo "setting up grub for UEFI system:" &&
-    pacman -S efibootmgr
-    read -p "Please enter path for efi mountpoint: " EFIMP &&
-    grub-install --target=x86_64-efi --efi-directory=$EFIMP --bootloader-id=GRUB &&
-    grub-mkconfig -o /boot/grub/grub.cfg &&
-    echo "done"
-}
+#   grub-uefi-script () {
+#     echo "setting up grub for UEFI system:" &&
+#     pacman -S efibootmgr
+#     read -p "Please enter path for efi mountpoint: " EFIMP &&
+#     grub-install --target=x86_64-efi --efi-directory=$EFIMP --bootloader-id=GRUB &&
+#     grub-mkconfig -o /boot/grub/grub.cfg &&
+#     echo "done"
+# }
 
-  grub-bios-script () {
-    echo "setting up grub for BIOS system:" &&
-    read -p "Please enter path for filesystem: " FSPI &&
-    grub-install --target=i386-pc $FSPI &&
-    grub-mkconfig -o /boot/grub/grub.cfg &&
-    echo "done"
-}
-
+#   grub-bios-script () {
+#     echo "setting up grub for BIOS system:" &&
+#     read -p "Please enter path for filesystem: " FSPI &&
+#     grub-install --target=i386-pc $FSPI &&
+#     grub-mkconfig -o /boot/grub/grub.cfg &&
+#     echo "done"
+# }
+  export -f chroot-script
   arch-chroot /mnt chroot-script &&
-  if [ $BOOTMODE = UEFI ]; then grub-uefi-script; else grub-bios-script; fi
+#   if [ $BOOTMODE = UEFI ]; then grub-uefi-script; else grub-bios-script; fi
 
 echo -e "\033[0;32m$(tput bold)---- Finished Installation ----$(tput sgr0)" &&
   printf "\n\n"
