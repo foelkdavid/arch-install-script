@@ -77,7 +77,7 @@
   sleep 2
   PARTITION2=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "2p") &&
   partprobe $DSK &&
-  if [ $BOOTMODE = UEFI ]; then PARTITION3=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $3}' | sed -n "3p"); else echo "No third Partition needet."; fi
+  if [ $BOOTMODE = UEFI ]; then PARTITION3=$(fdisk -l $DSK | grep $DSK | sed 1d | awk '{print $1}' | sed -n "3p"); else echo "No third Partition needet."; fi
   sleep 2 &&
   partprobe $DSK &&
 
@@ -101,7 +101,7 @@
 
 
     echo $ROOTPART
-    
+
   #   #root partition
   #   mkfs.ext4 $ROOTPART &&
 
