@@ -132,7 +132,7 @@ createfilesystem() {
 
 sysinstall() {
     pacstrap /mnt base linux linux-firmware networkmanager grub zsh man-db vim nano sudo neofetch &&
-    genfstab -U /mnt >> /mnt/etc/fstab &&
+    # genfstab -U /mnt >> /mnt/etc/fstab &&
     sleep 1
 arch-chroot /mnt /bin/bash -- << EOCHROOT
 
