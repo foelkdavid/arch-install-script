@@ -230,10 +230,10 @@ finalize() {
     VENDOR=$(grep vendor_id /proc/cpuinfo | head -n 1 | awk '{print $3}')
     if [ $VENDOR = AuthenticAMD ]; then
         echo "detected AMD CPU"
-        # pacstrap /mnt amd-ucode &&
-        elif [ $VENDOR = GenuineIntel ]; then
+        pacstrap /mnt amd-ucode &&
+    else
         echo "detected Intel CPU"
-        # pacstrap /mnt intel-ucode &&
+        pacstrap /mnt intel-ucode &&
     fi
 
 
