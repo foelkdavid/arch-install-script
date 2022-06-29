@@ -226,7 +226,7 @@ configure() {
 
 finalize() {
 
-    # installing microcode
+    # installing microcode !
     VENDOR=$(grep vendor_id /proc/cpuinfo | head -n 1 | awk '{print $3}')
     if [ $VENDOR = AuthenticAMD ]; then
         echo "detected AMD CPU"
