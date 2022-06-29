@@ -290,8 +290,8 @@ echo -e "\n${bold}Step 3 -> installation:${reset}" ; sleep 0.4
 echo -e "\n${bold}THIS CAN TAKE A WHILE...${reset}" ; sleep 0.4
 sysinstall
 
-# # STEP 4 -> CONFIGURATION
-# configure
+# STEP 4 -> CONFIGURATION
+configure
 
 # # STEP5 -> FINALIZE
 # echo -e "\n${bold}Step 5 -> finalize:${reset}" ; sleep 0.4
