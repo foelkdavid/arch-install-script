@@ -236,6 +236,10 @@ finalize() {
         pacstrap /mnt intel-ucode &&
     fi
 
+
+
+
+
     # setting up GRUB
     if [ $BOOTLOADER = UEFI ]; then
         echo "setting up grub for UEFI system:" &&
