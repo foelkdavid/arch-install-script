@@ -278,7 +278,6 @@ echo -e "${bold}Mounting Filesystems:${reset}"
 mount $ROOTPART /mnt && swapon $SWAPPART &&
 
 #efi
-
 if [ $BOOTLOADER = UEFI ]; then 
     mkfs.fat -F32 $EFIPART; 
     mkdir /mnt/efi
@@ -294,6 +293,13 @@ sysinstall
 
 # STEP 4 -> CONFIGURATION
 configure
+
+# configuring fstab
+echo $SWAPPART " swap swap rw,noatime,discard 0 0" >> /mnt/etc/fstab
+echo $ROOTPART " / ext4 noatime 0 1" >> /mnt/etc/fstab
+if [ $BOOTLOADER = UEFI ]; then echo $EFIPART " /boot ext4 noauto,noatime 0 2" >> /mnt/etc/fstab ; fi
+echo "tmpfs /tmp tmpfs defaults,nosuid,nodev 0 0" >> /mnt/etc/fstab
+
 
 # STEP5 -> FINALIZE
 echo -e "\n${bold}Step 5 -> finalize:${reset}" ; sleep 0.4
