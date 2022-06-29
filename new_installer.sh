@@ -268,17 +268,19 @@ configure() {
 echo -e "${bold}Starting Installer:${reset}" ; sleep 0.4
 preparation
 
-# # STEP 2 -> DRIVES
-# clear
-# echo -e "${bold}Step 2 -> drives:${reset}" ; sleep 0.4
-# echo -e "${bold}Partitioning:${reset}"
-# driveselect || exit ; sleep 0.4
-# echo -e "${bold}Creating Filesystem:${reset}"
-# getswap ; echo -e "Swapsize: ${blue}[$SWAP GB]${reset}" ; sleep 1
-# createfilesystem && ok || failexit ; sleep 0.4
-# echo -e "${bold}Mounting Filesystems:${reset}"
-# mount $ROOTPART /mnt && swapon $SWAPPART &&
-# if [ $BOOTLOADER = UEFI ]; then mkfs.fat -F32 $EFIPART; fi
+### -----------------------------------------------------------
+
+# STEP 2 -> DRIVES
+clear
+echo -e "${bold}Step 2 -> drives:${reset}" ; sleep 0.4
+echo -e "${bold}Partitioning:${reset}"
+driveselect || exit ; sleep 0.4
+echo -e "${bold}Creating Filesystem:${reset}"
+getswap ; echo -e "Swapsize: ${blue}[$SWAP GB]${reset}" ; sleep 1
+createfilesystem && ok || failexit ; sleep 0.4
+echo -e "${bold}Mounting Filesystems:${reset}"
+mount $ROOTPART /mnt && swapon $SWAPPART &&
+if [ $BOOTLOADER = UEFI ]; then mkfs.fat -F32 $EFIPART; fi
 
 
 # # STEP 3 -> INSTALLATION
