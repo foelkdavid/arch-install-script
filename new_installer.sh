@@ -269,7 +269,7 @@ configure() {
 echo -e "${bold}Starting Installer:${reset}" ; sleep 0.4
 preparation
 
-### -----------------------------------------------------------
+
 
 # STEP 2 -> DRIVES
 clear
@@ -283,11 +283,12 @@ echo -e "${bold}Mounting Filesystems:${reset}"
 mount $ROOTPART /mnt && swapon $SWAPPART &&
 if [ $BOOTLOADER = UEFI ]; then mkfs.fat -F32 $EFIPART; fi
 
+### -----------------------------------------------------------
 
-# # STEP 3 -> INSTALLATION
-# echo -e "\n${bold}Step 3 -> installation:${reset}" ; sleep 0.4
-# echo -e "\n${bold}THIS CAN TAKE A WHILE...${reset}" ; sleep 0.4
-# sysinstall
+# STEP 3 -> INSTALLATION
+echo -e "\n${bold}Step 3 -> installation:${reset}" ; sleep 0.4
+echo -e "\n${bold}THIS CAN TAKE A WHILE...${reset}" ; sleep 0.4
+sysinstall
 
 # # STEP 4 -> CONFIGURATION
 # configure
