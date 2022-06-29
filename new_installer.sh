@@ -225,44 +225,39 @@ configure() {
 }
 
 
-# finalize() {
+finalize() {
 
-#     # installing microcode 
-#     VENDOR=$(grep vendor_id /proc/cpuinfo | head -n 1 | awk '{print $3}')
-#     if [ $VENDOR = AuthenticAMD ]; then
-#         echo "detected AMD CPU"
-#         #pacstrap /mnt amd-ucode &&
-#         elif [ $VENDOR = GenuineIntel ]; then
-#         echo "detected Intel CPU"
-#         #pacstrap /mnt intel-ucode &&
-#     fi
+    # installing microcode 
+    VENDOR=$(grep vendor_id /proc/cpuinfo | head -n 1 | awk '{print $3}')
+    if [ $VENDOR = AuthenticAMD ]; then
+        pacstrap /mnt amd-ucode
+        elif [ $VENDOR = GenuineIntel ]; then
+        pacstrap /mnt intel-ucode
+    fi
 
-
+ 
 
 
 
-#     # setting up GRUB
-#     if [ $BOOTLOADER = UEFI ]; then
-#         echo "setting up grub for UEFI system:" &&
-#         pacstrap /mnt efibootmgr
-#         arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &&
-#         arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
-#         echo "done";
-#     else
-#         echo "setting up grub for BIOS system:" &&
-#         arch-chroot /mnt grub-install --target=i386-pc $DISK &&
-#         arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
-#         echo "done";
-#     fi
+    # setting up GRUB
+    if [ $BOOTLOADER = UEFI ]; then
+        echo "setting up grub for UEFI system:" &&
+        pacstrap /mnt efibootmgr
+        arch-chroot /mnt grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB &&
+        arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
+        echo "done";
+    else
+        echo "setting up grub for BIOS system:" &&
+        arch-chroot /mnt grub-install --target=i386-pc $DISK &&
+        arch-chroot /mnt grub-mkconfig -o /boot/grub/grub.cfg &&
+        echo "done";
+    fi
     
     
     
-#     clear
-#     echo -e "${green}INSTALLATION COMPLETED${reset}" ; sleep 0.4
-#     echo -e "${bold}enjoy your new system :)${reset}"
-#     printf "\n"
-#     echo "rebooting... see you soon :)" ; sleep 1
-# }
+    clear
+
+}
 
 
 # STEP 1 -> PREREQUISITES
@@ -293,9 +288,13 @@ sysinstall
 # STEP 4 -> CONFIGURATION
 configure
 
-# # STEP5 -> FINALIZE
-# echo -e "\n${bold}Step 5 -> finalize:${reset}" ; sleep 0.4
-# finalize
+# STEP5 -> FINALIZE
+echo -e "\n${bold}Step 5 -> finalize:${reset}" ; sleep 0.4
+finalize
 
-# # REBOOT
-# reboot now
+# REBOOT
+echo -e "${green}INSTALLATION COMPLETED${reset}" ; sleep 0.4
+echo -e "${bold}enjoy your new system :)${reset}"
+printf "\n"
+echo "rebooting... see you soon :)" ; sleep 1
+reboot now
