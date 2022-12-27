@@ -67,6 +67,7 @@ preparation() {
     printf "Checking Connection: "; networkcheck && ok || failexit ; sleep 0.4
     printf "Getting Bootloader: "; getbootloader && echo -e "${blue}[$BOOTLOADER]${reset}" || failexit ; sleep 0.4
     printf "Running Updates: ... " ; pacman -Sy --noconfirm > /dev/null && ok || failexit ; sleep 0.4
+    printf "Fixing broken Keys: ... " ; pacman -Sy archlinux-keyring && pacman -Su && pacman-key --init && pacman-key --populate && ok > /dev/null && ok || failexit ; sleep 0.4
     printf "Installing Parted for 'partprobe': ... " ; pacman -S --noconfirm parted > /dev/null && ok || failexit ; sleep 1.2
     printf "\n"
 }
