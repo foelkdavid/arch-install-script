@@ -1,3 +1,6 @@
+# Archived! Just use archinstall!
+
+
 # arch-installer
 Shell Script that installs a minimal Archlinux System.
 
